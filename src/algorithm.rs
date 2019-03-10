@@ -108,7 +108,7 @@ impl Bft {
         let _main_thread = thread::Builder::new()
             .name("main_loop".to_string())
             .spawn(move || {
-                let mut process_flag = true;
+                let mut process_flag = false;
                 loop {
                     let mut get_timer_msg = Err(RecvError);
                     let mut get_msg = Err(RecvError);
