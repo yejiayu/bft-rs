@@ -841,7 +841,7 @@ impl Bft {
                 }
             }
             BftMsg::Feed(feed) => {
-                if self.try_handle_feed(feed) && self.step == Step::ProposeWait {
+                if self.try_handle_feed(feed) && self.step <= Step::ProposeWait {
                     self.new_round_start();
                 }
             }
