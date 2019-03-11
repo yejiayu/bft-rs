@@ -149,6 +149,7 @@ impl Bft {
         tn: Receiver<TimeoutInfo>,
         local_address: Target,
     ) -> Self {
+        info!("Node address is {:?}", local_address);
         Bft {
             msg_sender: s,
             msg_receiver: r,
