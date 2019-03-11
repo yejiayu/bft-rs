@@ -55,10 +55,10 @@ impl From<u8> for Step {
             1u8 => Step::ProposeWait,
             2u8 => Step::Prevote,
             3u8 => Step::PrevoteWait,
-            4u8 => Step::Precommit,
-            5u8 => Step::PrecommitWait,
-            6u8 => Step::Commit,
-            7u8 => Step::CommitWait,
+            5u8 => Step::Precommit,
+            6u8 => Step::PrecommitWait,
+            7u8 => Step::Commit,
+            8u8 => Step::CommitWait,
             _ => panic!("Invalid step."),
         }
     }
