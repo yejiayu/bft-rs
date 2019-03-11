@@ -742,7 +742,13 @@ impl Bft {
             }
             // goto new height directly and update authorty list
             self.goto_new_height(rich_status.height + 1);
-            self.authority_list = rich_status.authority_list;
+            self.authority_list = rich_status.clone().authority_list;
+            trace!(
+                "The authorith list of height {:?}, is {:?}",
+                rich_status.height + 1,
+                rich_status.authority_list
+            );
+            
             if let Some(interval) = rich_status.interval {
                 // update the bft interval
                 self.params.timer.set_total_duration(interval);
