@@ -605,13 +605,12 @@ where
         self.function.transmit(msg);
         info!("Bft prevotes to {:?}", block_hash);
 
+        self.change_to_step(Step::Prevote);
         if !self.check_prevote_count() {
             self.set_timer(
                 self.params.timer.get_prevote() * TIMEOUT_RETRANSE_COEF,
                 Step::Prevote,
             );
-        } else {
-            self.change_to_step(Step::Prevote);
         }
     }
 
