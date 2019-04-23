@@ -250,6 +250,7 @@ where
                 #[cfg(feature = "verify_req")]
                 {
                     let verify_result = self.check_verify();
+                    log::info!("verify result {:?}", verify_result);
                     if verify_result == VerifyResult::Undetermined {
                         self.change_to_step(Step::VerifyWait);
                         return;
@@ -702,6 +703,7 @@ where
 
     #[inline]
     fn change_to_step(&mut self, step: Step) {
+        log::info!("change step self {:?}, change {:?}", self.step, step);
         self.step = step;
     }
 
