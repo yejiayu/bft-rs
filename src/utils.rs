@@ -364,6 +364,7 @@ where
         let block_hash = self.function.crypt_hash(block);
         // search cache first
         if let Some(verify_res) = self.verify_results.get(&block_hash) {
+            log::info!("verify_results {:?}", verify_res);
             if *verify_res {
                 return Ok(());
             } else {
@@ -375,7 +376,7 @@ where
         {
             if self.function.check_block(block, height).map_err(|e| {
                 // TODO: print error
-                println!("check block {:?}", e);
+                log::error!("check block {:?}", e);
                 BftError::CheckBlockFailed
             })? && self
                 .function
