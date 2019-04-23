@@ -722,16 +722,15 @@ where
                         }
 
                         log::info!("get block");
+                        if self.try_transmit_proposal() {
+                            self.transmit_prevote();
+                            self.check_prevote_count();
+                        } else {
+                            self.change_to_step(Step::ProposeWait);
+                        }
                     });
                 })
                 .unwrap();
-            }
-
-            if self.try_transmit_proposal() {
-                self.transmit_prevote();
-                self.check_prevote_count();
-            } else {
-                self.change_to_step(Step::ProposeWait);
             }
         } else {
             self.change_to_step(Step::ProposeWait);
