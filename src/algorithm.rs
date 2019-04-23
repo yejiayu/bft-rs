@@ -610,6 +610,8 @@ where
                 self.params.timer.get_prevote() * TIMEOUT_RETRANSE_COEF,
                 Step::Prevote,
             );
+        } else {
+            self.change_to_step(Step::Prevote);
         }
     }
 
