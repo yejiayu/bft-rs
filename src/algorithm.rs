@@ -599,14 +599,18 @@ where
         let vote_weight = self.get_vote_weight(self.height, &vote.voter);
         let _ = self.votes.add(&signed_vote, vote_weight, self.height);
 
-        let msg = BftMsg::Vote(rlp::encode(&signed_vote));
-        self.function.transmit(msg);
-        info!("Bft prevotes to {:?}", block_hash);
+        if self.check_prevote_count() {
+            self.change_to_step(Step::PrevoteWait);
+        } else {
+            let msg = BftMsg::Vote(rlp::encode(&signed_vote));
+            self.function.transmit(msg);
+            info!("Bft prevotes to {:?}", block_hash);
 
-        self.set_timer(
-            self.params.timer.get_prevote() * TIMEOUT_RETRANSE_COEF,
-            Step::Prevote,
-        );
+            self.set_timer(
+                self.params.timer.get_prevote() * TIMEOUT_RETRANSE_COEF,
+                Step::Prevote,
+            );
+        }
     }
 
     fn transmit_precommit(&mut self) {
@@ -716,15 +720,17 @@ where
                             sender.send(BftMsg::Feed(feed)).unwrap();
                         }
 
-                        if self.try_transmit_proposal() {
-                            self.transmit_prevote();
-                            self.change_to_step(Step::Prevote);
-                        } else {
-                            self.change_to_step(Step::ProposeWait);
-                        }
+                        log::info!("get block");
                     });
                 })
                 .unwrap();
+            }
+
+            if self.try_transmit_proposal() {
+                self.transmit_prevote();
+                self.change_to_step(Step::Prevote);
+            } else {
+                self.change_to_step(Step::ProposeWait);
             }
         } else {
             self.change_to_step(Step::ProposeWait);
