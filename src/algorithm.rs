@@ -601,13 +601,11 @@ where
         let vote_weight = self.get_vote_weight(self.height, &vote.voter);
         let _ = self.votes.add(&signed_vote, vote_weight, self.height);
 
-        if self.check_prevote_count() {
-            self.change_to_step(Step::PrevoteWait);
-        } else {
-            let msg = BftMsg::Vote(rlp::encode(&signed_vote));
-            self.function.transmit(msg);
-            info!("Bft prevotes to {:?}", block_hash);
+        let msg = BftMsg::Vote(rlp::encode(&signed_vote));
+        self.function.transmit(msg);
+        info!("Bft prevotes to {:?}", block_hash);
 
+        if !self.check_prevote_count() {
             self.set_timer(
                 self.params.timer.get_prevote() * TIMEOUT_RETRANSE_COEF,
                 Step::Prevote,
@@ -953,9 +951,12 @@ where
                     break;
                 }
             }
+            log::info!("set_timer prevote before");
             if self.step == Step::Prevote {
+                self.change_to_step(Step::PrevoteWait);
                 self.set_timer(tv, Step::PrevoteWait);
             }
+            log::info!("set_timer prevote after");
             return true;
         }
         false
