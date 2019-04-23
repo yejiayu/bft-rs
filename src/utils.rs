@@ -373,8 +373,9 @@ where
 
         #[cfg(not(feature = "verify_req"))]
         {
-            if self.function.check_block(block, height).map_err(|_e| {
+            if self.function.check_block(block, height).map_err(|e| {
                 // TODO: print error
+                println!("check block {:?}", e);
                 BftError::CheckBlockFailed
             })? && self
                 .function
