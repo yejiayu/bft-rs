@@ -715,16 +715,16 @@ where
                             let feed = Feed { height, block };
                             sender.send(BftMsg::Feed(feed)).unwrap();
                         }
+
+                        if self.try_transmit_proposal() {
+                            self.transmit_prevote();
+                            self.change_to_step(Step::Prevote);
+                        } else {
+                            self.change_to_step(Step::ProposeWait);
+                        }
                     });
                 })
                 .unwrap();
-            }
-
-            if self.try_transmit_proposal() {
-                self.transmit_prevote();
-                self.change_to_step(Step::Prevote);
-            } else {
-                self.change_to_step(Step::ProposeWait);
             }
         } else {
             self.change_to_step(Step::ProposeWait);
