@@ -952,6 +952,7 @@ where
                 }
             }
             log::info!("set_timer prevote before");
+            log::info!("set_timer prevote before {:?}", self.step);
             if self.step == Step::Prevote {
                 self.change_to_step(Step::PrevoteWait);
                 self.set_timer(tv, Step::PrevoteWait);
