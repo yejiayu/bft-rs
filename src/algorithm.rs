@@ -607,12 +607,10 @@ where
         info!("Bft prevotes to {:?}", block_hash);
 
         self.change_to_step(Step::Prevote);
-        if !self.check_prevote_count() {
-            self.set_timer(
-                self.params.timer.get_prevote() * TIMEOUT_RETRANSE_COEF,
-                Step::Prevote,
-            );
-        }
+        self.set_timer(
+            self.params.timer.get_prevote() * TIMEOUT_RETRANSE_COEF,
+            Step::Prevote,
+        );
     }
 
     fn transmit_precommit(&mut self) {
@@ -731,7 +729,7 @@ where
 
             if self.try_transmit_proposal() {
                 self.transmit_prevote();
-                self.change_to_step(Step::Prevote);
+                self.check_prevote_count();
             } else {
                 self.change_to_step(Step::ProposeWait);
             }
