@@ -217,6 +217,8 @@ where
     }
 
     fn timeout_process(&mut self, tminfo: &TimeoutInfo) {
+        log::info!("timeout process {:?}", tminfo);
+
         if tminfo.height < self.height {
             return;
         }
