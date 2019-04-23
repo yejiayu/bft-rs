@@ -250,7 +250,7 @@ where
                 #[cfg(feature = "verify_req")]
                 {
                     let verify_result = self.check_verify();
-                    log::info!("verify result {}", verify_result);
+                    log::info!("verify result {:?}", verify_result);
                     if verify_result == VerifyResult::Undetermined {
                         self.change_to_step(Step::VerifyWait);
                         return;

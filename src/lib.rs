@@ -91,7 +91,7 @@ pub enum BftMsg {
 }
 
 #[cfg(feature = "verify_req")]
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum VerifyResult {
     Approved,
     Failed,
